@@ -20,7 +20,7 @@ jobs:
         node: [14]
 
     steps:
-    - uses: actions/checkout@v1
+      - uses: actions/checkout@v1
       - name: Checkout 🛎
         uses: actions/checkout@master
 
