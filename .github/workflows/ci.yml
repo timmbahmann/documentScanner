@@ -20,9 +20,10 @@ jobs:
         node: [14]
 
     steps:
-      - uses: actions/checkout@v1
       - name: Checkout 🛎
         uses: actions/checkout@master
+        with:
+          fetch-depth: 0
 
       - name: Setup node env 🏗
         uses: actions/setup-node@v2.1.5
