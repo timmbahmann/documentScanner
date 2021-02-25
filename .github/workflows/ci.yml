@@ -50,6 +50,7 @@ jobs:
         # Options required to the GitHub chromatic action
         with:
           token: ${{ secrets.GITHUB_TOKEN }}
+          fetch-depth: 0
           # 👇 Chromatic projectToken, refer to the manage page to obtain it.
           projectToken: ${{ secrets.CHROMATIC_PROJECT_TOKEN }}
           exitZeroOnChanges: true # 👈 Option to prevent the workflow from failing
