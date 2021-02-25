@@ -46,10 +46,6 @@ jobs:
         run: npm run test
 
       - name: publish Storybook and run visual tests 📸
-        with:
-          fetch-depth: 0
-        run: npm run chromatic
-      - name: publish Storybook and run visual tests 📸
         uses: chromaui/action@v1
         # Options required to the GitHub chromatic action
         with:
