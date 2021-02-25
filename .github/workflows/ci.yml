@@ -42,5 +42,10 @@ jobs:
       - name: Run linter 👀
         run: npm run lint
 
-      - name: Run tests 🧪
+      - name: Run unit tests 🧪
         run: npm run test
+
+      - name: publish Storybook and run visual tests 📸
+        with:
+          fetch-depth: 0
+        run: npm run chromatic
