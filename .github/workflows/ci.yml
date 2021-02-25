@@ -20,6 +20,7 @@ jobs:
         node: [14]
 
     steps:
+    - uses: actions/checkout@v1
       - name: Checkout 🛎
         uses: actions/checkout@master
 
@@ -50,7 +51,6 @@ jobs:
         # Options required to the GitHub chromatic action
         with:
           token: ${{ secrets.GITHUB_TOKEN }}
-          fetch-depth: 0
           # 👇 Chromatic projectToken, refer to the manage page to obtain it.
           projectToken: ${{ secrets.CHROMATIC_PROJECT_TOKEN }}
           exitZeroOnChanges: true # 👈 Option to prevent the workflow from failing
