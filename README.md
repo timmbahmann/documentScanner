@@ -54,3 +54,7 @@ Everything is tied together with GitHub Actions in `.github`
 - If everything is alright (and pull request ist accepted) deploy everything to Netlify
 
 voilà: [https://heuristic-ride-57d384.netlify.app/](https://heuristic-ride-57d384.netlify.app/)
+
+## View UI Design on Figma
+
+[https://www.figma.com/file/28tfBNjv3QH8FAWqglE1fU/DocumentScanner?node-id=0%3A1](https://www.figma.com/file/28tfBNjv3QH8FAWqglE1fU/DocumentScanner?node-id=0%3A1)
