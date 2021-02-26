@@ -1,60 +1,64 @@
 <template>
-  <button type="button" :class="classes" :style="style" @click="onClick">
+  <button type="button" :style="style" @click="onClick">
     {{ label }}
   </button>
 </template>
 
 <script>
-import '../stories/button.css'
-
 export default {
   name: 'MyButton',
 
   props: {
     /**
-     * Documentation
+     * The text inside the Button
      */
     label: {
       type: String,
       required: true,
     },
-    primary: {
-      type: Boolean,
-      default: false,
-    },
-    size: {
+    /**
+     * 3 Types: primary, alert and normal.
+     * Primary with primary background and white color.
+     * Alert with no background and alert color.
+     * Normal with no background and primary color
+     */
+    type: {
       type: String,
-      default: 'medium',
-      validator(value) {
-        return ['small', 'medium', 'large'].includes(value)
-      },
-    },
-    backgroundColor: {
-      type: String,
-      default: 'red',
+      default: 'primary',
     },
   },
 
   computed: {
-    classes() {
-      return {
-        'storybook-button': true,
-        'storybook-button--primary': this.primary,
-        'storybook-button--secondary': !this.primary,
-        [`storybook-button--${this.size}`]: true,
-      }
-    },
     style() {
-      return {
-        backgroundColor: this.backgroundColor,
+      const style = {}
+      switch (this.type) {
+        case 'primary':
+          style.backgroundColor = 'var(--primary-color)'
+          style.color = '#fff'
+          break
+        case 'alert':
+          style.color = 'var(--alert-color)'
+          style.backgroundColor = 'rgba(0,0,0,0)'
+          break
+        case 'normal':
+          style.color = 'var(--primary-color)'
+          style.backgroundColor = 'rgba(0,0,0,0)'
       }
+      return style
     },
   },
 
   methods: {
     onClick() {
-      this.$emit('onClick')
+      this.$emit('click')
     },
   },
 }
 </script>
+<style lang="sass">
+@import '~/assets/sass/main.sass'
+button
+  border: 0
+  padding: 1em 2em
+  text-transform: uppercase
+</style>

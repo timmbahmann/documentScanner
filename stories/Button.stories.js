@@ -6,9 +6,11 @@ export default {
   component: MyButton,
   decorators: [withDesign],
   argTypes: {
-    backgroundColor: { control: 'color' },
-    size: {
-      control: { type: 'select', options: ['small', 'medium', 'large'] },
+    type: {
+      control: {
+        type: 'select',
+        options: ['primary', 'normal', 'alert'],
+      },
     },
   },
   parameters: {
@@ -28,23 +30,18 @@ const Template = (_args, { argTypes }) => ({
 
 export const Primary = Template.bind({})
 Primary.args = {
-  primary: true,
-  label: 'Button',
+  type: 'primary',
+  label: 'Bestätigen',
 }
 
-export const Secondary = Template.bind({})
-Secondary.args = {
-  label: 'Button',
+export const Alert = Template.bind({})
+Alert.args = {
+  type: 'alert',
+  label: 'Abbrechen',
 }
 
-export const Large = Template.bind({})
-Large.args = {
-  size: 'large',
-  label: 'Button',
-}
-
-export const Small = Template.bind({})
-Small.args = {
-  size: 'small',
-  label: 'Button',
+export const Normal = Template.bind({})
+Normal.args = {
+  type: 'normal',
+  label: 'Ok',
 }
