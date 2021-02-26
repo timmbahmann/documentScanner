@@ -25,6 +25,9 @@ export default {
     type: {
       type: String,
       default: 'primary',
+      validate(type) {
+        return ['primary', 'normal', 'alert'].includes(type)
+      },
     },
   },
 
