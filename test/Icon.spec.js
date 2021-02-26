@@ -2,6 +2,10 @@ import { mount } from '@vue/test-utils'
 import Icon from '@/components/Icon.vue'
 
 function testIcon(name) {
+  it('should be a valid name', () => {
+    const validator = Icon.props.name.validator
+    expect(validator(name)).toBe(true)
+  })
   const wrapper = mount(Icon, {
     propsData: {
       name,
@@ -14,22 +18,7 @@ function testIcon(name) {
 }
 
 describe('icons', () => {
-  const icons = [
-    'abort',
-    'camera',
-    'back',
-    'add',
-    'cameraTrigger',
-    'check',
-    'edit',
-    'error',
-    'grip',
-    'next',
-    'reload',
-    'rotate',
-    'settings',
-    'success',
-  ]
+  const icons = Object.keys(Icon.data().icons)
   for (const iconName of icons) {
     describe(iconName, () => {
       testIcon(iconName)
@@ -52,5 +41,17 @@ describe('icons', () => {
       await wrapper.setProps({ height: 50 })
       expect(wrapper.attributes('width')).toEqual('50')
     })
+  })
+  describe('test invalid names', () => {
+    const invalids = [
+      '',
+      '/',
+      'dfrthjzkrujnbgdn mtfuzhöoinh euhtenbg“¶¢[]|¨',
+      ';eval()"eval()',
+    ]
+    const validator = Icon.props.name.validator
+    for (const invalid in invalids) {
+      expect(validator(invalid)).toBe(false)
+    }
   })
 })

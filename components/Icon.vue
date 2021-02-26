@@ -21,8 +21,23 @@ export default {
     name: {
       type: String,
       required: true,
-      validate(name) {
-        return Object.keys(this.icons).includes(name)
+      validator(name) {
+        return [
+          'abort',
+          'camera',
+          'back',
+          'add',
+          'cameraTrigger',
+          'check',
+          'edit',
+          'error',
+          'grip',
+          'next',
+          'reload',
+          'rotate',
+          'settings',
+          'success',
+        ].includes(name)
       },
     },
     width: {
@@ -36,7 +51,7 @@ export default {
     color: {
       type: String,
       default: 'normal',
-      validate(type) {
+      validator(type) {
         return ['primary', 'normal', 'alert', 'success'].includes(type)
       },
     },
