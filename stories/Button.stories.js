@@ -12,6 +12,7 @@ export default {
         options: ['primary', 'normal', 'alert'],
       },
     },
+    click: { action: 'clicked' },
   },
   parameters: {
     design: {
@@ -25,7 +26,7 @@ export default {
 const Template = (_args, { argTypes }) => ({
   props: Object.keys(argTypes),
   components: { MyButton },
-  template: '<my-button v-bind="$props" />',
+  template: '<my-button @click="click" v-bind="$props" />',
 })
 
 export const Primary = Template.bind({})
