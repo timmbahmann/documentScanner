@@ -69,6 +69,12 @@ export default {
     showStaticImage() {
       this.proceed()
     },
+    width() {
+      this.proceed()
+    },
+    height() {
+      this.proceed()
+    },
   },
   mounted() {
     this.createCameraElement()
@@ -77,23 +83,43 @@ export default {
     }
   },
   methods: {
+    compByFit(a, b, objectFit) {
+      if (objectFit === 'cover') {
+        return a < b
+      } else {
+        return a > b
+      }
+    },
+    resize(objectFit) {
+      this.ratioY = this.imageHeight / this.height
+      this.ratioX = this.imageWidth / this.width
+      if (this.compByFit(this.ratioX, this.ratioY, objectFit)) {
+        this.canvasWidth = this.width
+        this.canvasHeight = this.imageHeight / this.ratioX
+        if (objectFit === 'cover') {
+          this.offsetY = -Math.abs((this.height - this.canvasHeight) / 2)
+          this.offsetX = 0
+        } else {
+          this.offsetY = Math.abs((this.height - this.canvasHeight) / 2)
+          this.offsetX = 0
+        }
+      } else {
+        this.canvasWidth = this.imageWidth / this.ratioY
+        this.canvasHeight = this.height
+        if (objectFit === 'cover') {
+          this.offsetX = -Math.abs((this.width - this.canvasWidth) / 2)
+          this.offsetY = 0
+        } else {
+          this.offsetX = Math.abs((this.width - this.canvasWidth) / 2)
+          this.offsetY = 0
+        }
+      }
+    },
     proceed() {
       const canvas = this.$refs.canvas
       const ctx = canvas.getContext('2d')
       if (this.showStaticImage && !this.data) {
-        this.ratioY = this.imageHeight / this.height
-        this.ratioX = this.imageWidth / this.width
-        if (this.ratioX < this.ratioY) {
-          this.canvasWidth = this.width
-          this.canvasHeight = this.imageHeight / this.ratioX
-          this.offsetY = -Math.abs((this.height - this.canvasHeight) / 2)
-          this.offsetX = 0
-        } else {
-          this.canvasWidth = this.imageWidth / this.ratioY
-          this.canvasHeight = this.height
-          this.offsetX = -Math.abs((this.width - this.canvasWidth) / 2)
-          this.offsetY = 0
-        }
+        this.resize('cover')
         ctx.drawImage(
           this.$refs.camera,
           this.offsetX,
@@ -104,8 +130,17 @@ export default {
         this.$emit('image', { canvas, image: canvas.toDataURL() })
       } else if (this.data) {
         const image = new Image()
-        image.onload = function () {
-          ctx.drawImage(image, 0, 0)
+        image.onload = () => {
+          this.imageHeight = image.height
+          this.imageWidth = image.width
+          this.resize('contain')
+          ctx.drawImage(
+            image,
+            this.offsetX,
+            this.offsetY,
+            this.canvasWidth,
+            this.canvasHeight
+          )
         }
         image.src = this.data
       }
