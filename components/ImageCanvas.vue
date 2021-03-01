@@ -67,19 +67,19 @@ export default {
   },
   watch: {
     showStaticImage() {
-      this.proceed()
+      this.captureFrame()
     },
     width() {
-      this.proceed()
+      this.captureFrame()
     },
     height() {
-      this.proceed()
+      this.captureFrame()
     },
   },
   mounted() {
     this.createCameraElement()
     if (this.showStaticImage && this.data) {
-      this.proceed()
+      this.captureFrame()
     }
   },
   methods: {
@@ -90,59 +90,73 @@ export default {
         return a > b
       }
     },
-    resize(objectFit) {
+    offsetByFit(axis1, objectFit) {
+      let axis2, refLength1, refLength2
+      if (axis1 === 'X') {
+        axis2 = 'Y'
+        refLength1 = 'width'
+        refLength2 = 'canvasWidth'
+      } else {
+        axis2 = 'X'
+        refLength1 = 'height'
+        refLength2 = 'canvasHeight'
+      }
+      if (objectFit === 'cover') {
+        this['offset' + axis1] = -Math.abs(
+          (this[refLength1] - this[refLength2]) / 2
+        )
+        this['offset' + axis2] = 0
+      } else {
+        this['offset' + axis1] = Math.abs(
+          (this[refLength1] - this[refLength2]) / 2
+        )
+        this['offset' + axis2] = 0
+      }
+    },
+    resizeFrame(objectFit) {
       this.ratioY = this.imageHeight / this.height
       this.ratioX = this.imageWidth / this.width
       if (this.compByFit(this.ratioX, this.ratioY, objectFit)) {
         this.canvasWidth = this.width
         this.canvasHeight = this.imageHeight / this.ratioX
-        if (objectFit === 'cover') {
-          this.offsetY = -Math.abs((this.height - this.canvasHeight) / 2)
-          this.offsetX = 0
-        } else {
-          this.offsetY = Math.abs((this.height - this.canvasHeight) / 2)
-          this.offsetX = 0
-        }
+        this.offsetByFit('Y', objectFit)
       } else {
         this.canvasWidth = this.imageWidth / this.ratioY
         this.canvasHeight = this.height
-        if (objectFit === 'cover') {
-          this.offsetX = -Math.abs((this.width - this.canvasWidth) / 2)
-          this.offsetY = 0
-        } else {
-          this.offsetX = Math.abs((this.width - this.canvasWidth) / 2)
-          this.offsetY = 0
-        }
+        this.offsetByFit('X', objectFit)
       }
     },
-    proceed() {
+    drawImage(image) {
+      const ctx = this.$refs.canvas.getContext('2d')
+      ctx.drawImage(
+        image,
+        this.offsetX,
+        this.offsetY,
+        this.canvasWidth,
+        this.canvasHeight
+      )
+    },
+    drawData() {
+      const image = new Image()
+      image.onload = () => {
+        this.imageHeight = image.height
+        this.imageWidth = image.width
+        this.resizeFrame('contain')
+        this.drawImage(image)
+      }
+      image.src = this.data
+    },
+    drawFrame() {
+      this.resizeFrame('cover')
+      this.drawImage(this.$refs.camera)
+    },
+    captureFrame() {
       const canvas = this.$refs.canvas
-      const ctx = canvas.getContext('2d')
       if (this.showStaticImage && !this.data) {
-        this.resize('cover')
-        ctx.drawImage(
-          this.$refs.camera,
-          this.offsetX,
-          this.offsetY,
-          this.canvasWidth,
-          this.canvasHeight
-        )
+        this.drawFrame()
         this.$emit('image', { canvas, image: canvas.toDataURL() })
       } else if (this.data) {
-        const image = new Image()
-        image.onload = () => {
-          this.imageHeight = image.height
-          this.imageWidth = image.width
-          this.resize('contain')
-          ctx.drawImage(
-            image,
-            this.offsetX,
-            this.offsetY,
-            this.canvasWidth,
-            this.canvasHeight
-          )
-        }
-        image.src = this.data
+        this.drawData()
       }
     },
     createCameraElement() {
