@@ -33,5 +33,5 @@ export default Vue.extend({})
 
 <style lang="sass">
 a
-  color: $primary-color
+  color: var(--primary-color)
 </style>
