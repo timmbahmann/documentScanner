@@ -59,7 +59,6 @@ export default {
       dragIndex: 0,
       canvasPos: null,
       imageData: null,
-      savedImageData: null,
       newDocumentPosition: [
         [0, 0],
         [0, 0],
