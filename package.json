@@ -25,7 +25,7 @@
     "@nuxt/typescript-build": "^2.0.4",
     "@nuxtjs/eslint-config-typescript": "^5.0.0",
     "@nuxtjs/eslint-module": "^3.0.2",
-    "@storybook/addon-actions": "^6.1.20",
+    "@storybook/addon-actions": "^6.5.14",
     "@storybook/addon-essentials": "^6.1.20",
     "@storybook/addon-links": "^6.1.20",
     "@storybook/vue": "^6.1.20",
